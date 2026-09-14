@@ -4,27 +4,27 @@ class Food {
   int quantity;
   String? description;
 
-  Food(this.name, this.price, this.quantity, this.description);
+  Food({required this.name, required this.price, required this.quantity, this.description});
 
-  double calculateTotal(price, quantity) {
+  double calculateTotal() {
     return price * quantity;
   }
 }
 
 void main() {
   List<Food> foods = [
-    Food("Momo", 120, 3, "Steamed dumplings"),
-    Food("Burger ", 180, 2, null),
-    Food("Pizza", 250, 1, "Cheesy Italian pizza"),
-    Food("Brot", 70, 4, "French brot"),
+    Food(name: "Momo", price: 120, quantity:  3, description:  "Steamed dumplings"),
+    Food(name: "Burger", price: 180, quantity:  2, description:  null),
+    Food(name: "Pizza", price: 250, quantity:  1, description:  "Cheesy Italian pizza"),
+    Food(name: "Brot", price: 70,  quantity: 4, description:  "French brot"),
   ];
 
   double total = 0;
 
   for (var food in foods) {
-    total += food.calculateTotal(food.price, food.quantity);
+    total += food.calculateTotal();
     print(
-      "${food.name} - ${food.description ?? "No description available"} - Rs. ${food.price} x ${food.quantity} = Rs. ${food.calculateTotal(food.price, food.quantity)}",
+      "${food.name} - ${food.description ?? "No description available"} - Rs. ${food.price} x ${food.quantity} = Rs. ${food.calculateTotal()}",
     );
   }
 
