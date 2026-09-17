@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:dart_expense_tracker/models/expense.dart';
 import 'package:dart_expense_tracker/services/expense_service.dart';
+import 'package:dart_expense_tracker/utils/ui.dart';
+
+final uiux = UiUx();
 
 int readChoice(String message, int maxChoice) {
   while (true) {
@@ -16,19 +19,22 @@ int readChoice(String message, int maxChoice) {
 }
 
 Future<void> addExpenseHelper(ExpenseService expenseService) async {
-  String title = readText("Expense title: ");
-  double amount = readAmount("Amount: ");
+  uiux.topBanner();
+  print("Adding Expense to the list");
+  String title = readText("* Expense title: ");
+  double amount = readAmount("* Amount: ");
   print("\nChoose a category:");
 
   for (var i = 0; i < ExpenseCategory.values.length; i++) {
     print("${i + 1}. ${ExpenseCategory.values[i].name}");
   }
 
-  int choice = readChoice("Category number: ", ExpenseCategory.values.length);
+  int choice = readChoice("* Category number: ", ExpenseCategory.values.length);
 
   ExpenseCategory category = ExpenseCategory.values[choice - 1];
 
   Expense expense = Expense(
+    id: expenseService.getNextId(),
     title: title,
     amount: amount,
     category: category,
@@ -41,7 +47,7 @@ Future<void> addExpenseHelper(ExpenseService expenseService) async {
   print(amount);
   print(category.name);
   print("Expense adeed successfully.");
-  await delay(3);
+  // await uiux.delay(3);
 }
 
 String readText(String message) {
@@ -62,6 +68,31 @@ double readAmount(String message) {
   }
 }
 
-Future<void> delay(int time) async {
-  await Future.delayed(Duration(seconds: time));
+void confirmationDialog(String message) {
+  while (true) {
+    stdout.write(message);
+    final choice = (stdin.readLineSync() ?? '').trim().toLowerCase();
+    if (choice == 'y' || choice == 'yes') {
+      exit(0);
+    } else if (choice == 'n' || choice == 'no') {
+      break;
+    } else {
+      print("Invalid choice");
+    }
+  }
+}
+
+bool deleteConfirmationDialog(String message) {
+  while (true) {
+    stdout.write(message);
+    final choice = (stdin.readLineSync() ?? '').trim().toLowerCase();
+
+    if (choice == 'y' || choice == 'yes') {
+      return true;
+    } else if (choice == 'n' || choice == 'no') {
+      return false;
+    } else {
+      print("Invalid choice");
+    }
+  }
 }
